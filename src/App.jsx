@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Hero from './components/sections/Hero';
-import PlaceholderSection from './components/sections/PlaceholderSection';
+import Story from './components/sections/story/Story';
 import Menu from './components/sections/menu/Menu';
 import Gallery from './components/sections/gallery/Gallery';
 import Visit from './components/sections/visit/Visit';
@@ -44,13 +44,7 @@ function App() {
           <Hero />
           <Menu />
           <Gallery />
-          <PlaceholderSection
-            id="story"
-            eyebrow="Coming up next"
-            title="Our Story"
-            note="Reserved for the café's story and photography."
-            alt
-          />
+          <Story />
           <Visit />
           <Contact />
         </main>

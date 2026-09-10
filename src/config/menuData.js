@@ -47,6 +47,7 @@ export const menuItems = [
     description: 'Classic tomato base, mozzarella, and a touch of basil.',
     category: 'Pizza',
     veg: true,
+    featured: true,
     sizes: [
       { id: 'reg', label: 'Regular', price: 199 },
       { id: 'med', label: 'Medium', price: 349 },
@@ -97,6 +98,7 @@ export const menuItems = [
     description: 'South Indian filter coffee, hand-poured.',
     category: 'Beverages',
     veg: true,
+    featured: true,
     price: 60,
   },
   {
@@ -179,6 +181,7 @@ export const menuItems = [
     description: 'Smoky grilled paneer marinated in tandoori spices.',
     category: 'Starters & Snacks',
     veg: true,
+    featured: true,
     price: 199,
   },
 
@@ -213,6 +216,7 @@ export const menuItems = [
     description: 'Grilled chicken patty with lettuce, cheese, and mayo.',
     category: 'Sandwiches & Burgers',
     veg: false,
+    featured: true,
     price: 159,
   },
 
@@ -231,6 +235,7 @@ export const menuItems = [
     description: 'Our chocolate brownie topped with vanilla ice cream.',
     category: 'Desserts',
     veg: true,
+    featured: true,
     price: 149,
   },
   {

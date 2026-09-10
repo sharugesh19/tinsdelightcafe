@@ -8,6 +8,12 @@ const STEP_MS = 2600;
 const TOTAL_SLOTS = VISIBLE + BUFFER * 2; // 7 rendered, 5 visible
 const DOT_COUNT = 6; // decorative page indicator, cycles independently
 
+const heroPlateModules = import.meta.glob(
+  '../../assets/hero/*.{png,jpg,jpeg,webp,avif}',
+  { eager: true, import: 'default' }
+);
+const heroPlateImages = Object.values(heroPlateModules);
+
 function Hero() {
   const { hero, contact } = cafeConfig;
   const whatsappHref = `https://wa.me/${contact.whatsapp.dial}?text=${encodeURIComponent(
@@ -76,9 +82,24 @@ function Hero() {
               className={`hero__gallery-track${shifted ? ' hero__gallery-track--shift' : ''}`}
               onTransitionEnd={handleTransitionEnd}
             >
-              {plates.map((plate) => (
-                <div key={plate.id} className="hero__plate" />
-              ))}
+              {plates.map((plate) => {
+                const imgSrc =
+                  heroPlateImages.length > 0
+                    ? heroPlateImages[plate.id % heroPlateImages.length]
+                    : null;
+                return (
+                  <div key={plate.id} className="hero__plate">
+                    {imgSrc && (
+                      <img
+                        src={imgSrc}
+                        alt="Café Delight dish"
+                        className="hero__plate-img"
+                        loading="eager"
+                      />
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
