@@ -1,0 +1,87 @@
+.logo-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.logo-mark__image {
+  display: block;
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo-mark__badge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background-color: var(--color-espresso);
+  border: 1.5px solid var(--color-brass);
+  flex-shrink: 0;
+}
+
+.logo-mark__badge-ring {
+  position: absolute;
+  inset: 3px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(212, 168, 87, 0.45);
+}
+
+.logo-mark__badge-letter {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-brass-light);
+  line-height: 1;
+}
+
+.logo-mark__wordmark {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: inherit;
+  white-space: nowrap;
+}
+
+/* --- Size variants --- */
+.logo-mark--sm .logo-mark__badge,
+.logo-mark--sm .logo-mark__image {
+  width: 34px;
+  height: 34px;
+}
+.logo-mark--sm .logo-mark__badge-letter {
+  font-size: var(--text-sm);
+}
+.logo-mark--sm .logo-mark__wordmark {
+  font-size: var(--text-sm);
+}
+
+.logo-mark--md .logo-mark__badge,
+.logo-mark--md .logo-mark__image {
+  width: 44px;
+  height: 44px;
+}
+.logo-mark--md .logo-mark__badge-letter {
+  font-size: var(--text-md);
+}
+.logo-mark--md .logo-mark__wordmark {
+  font-size: var(--text-md);
+}
+
+.logo-mark--lg .logo-mark__badge,
+.logo-mark--lg .logo-mark__image {
+  width: 84px;
+  height: 84px;
+}
+.logo-mark--lg .logo-mark__badge-letter {
+  font-size: var(--text-2xl);
+}
+.logo-mark--lg .logo-mark__badge::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 0 1px rgba(184, 134, 59, 0.25);
+}
