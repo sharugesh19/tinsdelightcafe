@@ -1,35 +1,52 @@
+import { useEffect, useRef, useState } from 'react';
 import { cafeConfig } from '../../config/cafeConfig';
-import LogoMark from '../common/LogoMark';
 import { IconPin } from '../common/Icons';
 import './Hero.css';
 
-/**
- * Hero
- * -----------------------------------------------------------------------
- * Desktop renders a two-panel composition: brand/copy/CTAs on the left,
- * a decorative "visual" panel (no food photography available yet, so it
- * leans on typography + the tin-badge motif + texture) on the right.
- * Mobile drops the visual panel and composes logo → headline → copy →
- * CTAs → location, all above the fold on common phone sizes.
- * -----------------------------------------------------------------------
- */
+const VISIBLE = 5;
+const BUFFER = 1;
+const STEP_MS = 2600;
+const TOTAL_SLOTS = VISIBLE + BUFFER * 2; // 7 rendered, 5 visible
+const DOT_COUNT = 6; // decorative page indicator, cycles independently
+
 function Hero() {
   const { hero, contact } = cafeConfig;
   const whatsappHref = `https://wa.me/${contact.whatsapp.dial}?text=${encodeURIComponent(
     "Hi! I'd like to place an order.",
   )}`;
 
+  const [plates, setPlates] = useState(() =>
+    Array.from({ length: TOTAL_SLOTS }, (_, i) => ({ id: i })),
+  );
+  const [shifted, setShifted] = useState(false);
+  const [activeDot, setActiveDot] = useState(0);
+  const nextId = useRef(TOTAL_SLOTS);
+  const trackRef = useRef(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return undefined;
+
+    const interval = setInterval(() => setShifted(true), STEP_MS);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleTransitionEnd = (e) => {
+    if (e.target !== trackRef.current || e.propertyName !== 'transform') return;
+    setPlates((prev) => [...prev.slice(1), { id: nextId.current++ }]);
+    setShifted(false);
+    setActiveDot((prev) => (prev + 1) % DOT_COUNT);
+  };
+
   return (
     <section id="home" className="hero">
       <div className="container hero__inner">
         <div className="hero__copy">
-          <LogoMark size="lg" className="hero__logo" />
-
           <p className="hero__eyebrow">{hero.eyebrow}</p>
 
           <h1 className="hero__headline">
-            {hero.headlineLines.map((line, index) => (
-              <span key={line} className="hero__headline-line" style={{ '--i': index }}>
+            {hero.headlineLines.map((line) => (
+              <span key={line} className="hero__headline-line">
                 {line}
               </span>
             ))}
@@ -41,8 +58,8 @@ function Hero() {
             <a href={hero.primaryCta.href} className="btn btn--primary">
               {hero.primaryCta.label}
             </a>
-            <a
-              href={whatsappHref}
+            
+            <a  href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn--outline"
@@ -57,12 +74,28 @@ function Hero() {
           </p>
         </div>
 
-        <div className="hero__visual" aria-hidden="true">
-          <div className="hero__visual-frame">
-            <span className="hero__visual-ring hero__visual-ring--outer" />
-            <span className="hero__visual-ring hero__visual-ring--inner" />
-            <span className="hero__visual-emblem">T</span>
-            <span className="hero__visual-caption">Since the corner-shop days</span>
+        <div className="hero__gallery" aria-hidden="true">
+          <p className="hero__gallery-caption">Menu photos coming soon</p>
+
+          <div className="hero__gallery-viewport">
+            <div
+              ref={trackRef}
+              className={`hero__gallery-track${shifted ? ' hero__gallery-track--shift' : ''}`}
+              onTransitionEnd={handleTransitionEnd}
+            >
+              {plates.map((plate) => (
+                <div key={plate.id} className="hero__plate" />
+              ))}
+            </div>
+          </div>
+
+          <div className="hero__gallery-dots">
+            {Array.from({ length: DOT_COUNT }).map((_, i) => (
+              <span
+                key={i}
+                className={`hero__gallery-dot${i === activeDot ? ' hero__gallery-dot--active' : ''}`}
+              />
+            ))}
           </div>
         </div>
       </div>

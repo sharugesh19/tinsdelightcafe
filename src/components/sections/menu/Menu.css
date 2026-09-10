@@ -103,7 +103,7 @@
 .menu__category-pill--active {
   background-color: var(--color-accent);
   border-color: var(--color-accent);
-  color: var(--color-espresso);
+  color: var(--color-on-accent);
 }
 
 /* --- Grouped category lists (editorial layout) --- */

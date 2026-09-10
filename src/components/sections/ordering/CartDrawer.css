@@ -64,7 +64,7 @@
 }
 
 .cart-drawer__close:hover {
-  background-color: rgba(243, 233, 210, 0.1);
+  background-color: rgba(248, 240, 226, 0.1);
   color: var(--color-brass-light);
 }
 

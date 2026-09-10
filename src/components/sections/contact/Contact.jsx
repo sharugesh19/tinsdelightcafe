@@ -35,7 +35,14 @@ function Contact() {
               <IconClock />
             </span>
             <span className="contact__card-label">Hours</span>
-            <p className="contact__card-value">{contact.hours}</p>
+            <ul className="contact__hours-list">
+              {contact.hours.map((row) => (
+                <li key={row.day} className="contact__hours-row">
+                  <span className="contact__hours-day">{row.day}</span>
+                  <span className="contact__hours-time">{row.time}</span>
+                </li>
+              ))}
+            </ul>
           </article>
 
           <article className="card contact__card">

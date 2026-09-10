@@ -43,7 +43,14 @@ function Visit() {
               <IconClock />
             </span>
             <span className="visit__card-label">Hours</span>
-            <p className="visit__card-value">{contact.hours}</p>
+            <ul className="visit__hours-list">
+              {contact.hours.map((row) => (
+                <li key={row.day} className="visit__hours-row">
+                  <span className="visit__hours-day">{row.day}</span>
+                  <span className="visit__hours-time">{row.time}</span>
+                </li>
+              ))}
+            </ul>
 
             <a
               href={contact.directionsUrl}

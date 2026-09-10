@@ -8,17 +8,20 @@
 
 :root {
   /* ---------- COLOR: base palette ---------- */
-  --color-espresso:      #2B1B14; /* deep coffee brown — dark sections, footer */
-  --color-espresso-2:    #3A2419; /* lifted espresso for cards on dark bg */
-  --color-cream:         #F3E9D2; /* warm parchment — main light background */
-  --color-cream-2:       #EADFC3; /* slightly deeper cream — section dividers */
-  --color-brass:         #B8863B; /* aged brass/gold — primary accent */
-  --color-brass-light:   #D4A857; /* brass hover/highlight state */
-  --color-oxblood:       #7A2E2A; /* vintage enamel red — rare, high-emphasis accent */
-  --color-forest:        #2F4632; /* deep vintage green — secondary accent */
-  --color-charcoal:      #241C16; /* near-black warm — primary text on cream */
-  --color-ink-soft:      #5A4C3E; /* muted brown-grey — secondary text on cream */
-  --color-paper:         #FBF6EB; /* lightest tone — cards on cream background */
+  --color-espresso:      #3B1730; /* deep plum — dark sections, footer */
+  --color-espresso-2:    #4C1F3F; /* lifted plum for cards on dark bg */
+  --color-cream:         #FCF4E7; /* warm parchment — main light background */
+  --color-cream-2:       #F3E7CE; /* slightly deeper cream — section dividers */
+  --color-brass:         #C9A227; /* logo gold ring — small-detail accent (dividers, icons) */
+  --color-brass-light:   #E0BE4E; /* gold hover/highlight state */
+  --color-oxblood:       #E0708F; /* rose-pink, exact logo tone — solid-fill use (backgrounds, dots) */
+  --color-oxblood-text:  #D33662; /* rose-pink deepened for contrast — use when rendered as text */
+  --color-oxblood-light: #EDA0B5; /* pastel pink hover/highlight state */
+  --color-forest:        #4E9488; /* sage-teal, exact logo tone — primary accent (buttons, CTAs) */
+  --color-forest-light:  #7BB3A8; /* pastel teal hover/highlight state */
+  --color-charcoal:      #2E1A2A; /* deep plum-black — primary text on cream */
+  --color-ink-soft:      #6B5568; /* muted plum-grey — secondary text on cream */
+  --color-paper:         #FFFCF6; /* lightest tone — cards on cream background */
   --color-white:         #FFFFFF;
 
   /* Semantic aliases — reference these in components, not raw colors */
@@ -29,12 +32,14 @@
   --color-text:          var(--color-charcoal);
   --color-text-muted:    var(--color-ink-soft);
   --color-text-on-dark:  var(--color-cream);
-  --color-text-on-dark-muted: #C9B896;
-  --color-accent:        var(--color-brass);
-  --color-accent-hover:  var(--color-brass-light);
-  --color-accent-strong: var(--color-oxblood);
+  --color-text-on-dark-muted: #D9C3D6;
+  --color-accent:        var(--color-forest);
+  --color-accent-hover:  var(--color-forest-light);
+  --color-accent-strong: var(--color-oxblood-text); /* used as text (prices, labels) — kept dark enough to read */
+  --color-accent-strong-bg: var(--color-oxblood); /* used as a solid fill (badges, dots, cart count) — true logo pink */
+  --color-on-accent:     var(--color-espresso); /* text/icon color for anything sitting on the accent color — these are pastel tones, so dark plum reads better than cream */
   --color-border:        rgba(43, 27, 20, 0.14);
-  --color-border-on-dark: rgba(243, 233, 210, 0.16);
+  --color-border-on-dark: rgba(248, 240, 226, 0.16);
 
   /* ---------- TYPOGRAPHY ---------- */
   --font-display: 'Fraunces', 'Georgia', serif;   /* headings, emblem type */
@@ -238,7 +243,7 @@ ul, ol {
   z-index: var(--z-modal);
   transform: translateY(-150%);
   background-color: var(--color-accent);
-  color: var(--color-espresso);
+  color: var(--color-on-accent);
   font-family: var(--font-body);
   font-weight: 600;
   font-size: var(--text-sm);
@@ -308,7 +313,7 @@ body.has-cart-launcher {
 
 .btn--primary {
   background-color: var(--color-accent);
-  color: var(--color-espresso);
+  color: var(--color-on-accent);
 }
 
 .btn--primary:hover {
@@ -317,12 +322,14 @@ body.has-cart-launcher {
 
 .btn--outline {
   background-color: transparent;
-  border-color: currentColor;
-  color: var(--color-text-on-dark);
+  border-color: var(--color-oxblood);
+  color: var(--color-oxblood-text);
 }
 
 .btn--outline:hover {
-  background-color: var(--color-border-on-dark);
+  background-color: var(--color-oxblood);
+  color: var(--color-cream);
+  border-color: var(--color-oxblood);
 }
 
 .btn--ghost {

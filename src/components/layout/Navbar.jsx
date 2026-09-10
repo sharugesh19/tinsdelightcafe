@@ -1,10 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { cafeConfig } from '../../config/cafeConfig';
+import { menuItems } from '../../config/menuData';
 import { useCart } from '../sections/ordering/CartContext';
 import { useSearch } from '../common/SearchContext';
 import LogoMark from '../common/LogoMark';
 import { IconBag, IconSearch, IconClose } from '../common/Icons';
 import './Navbar.css';
+
+const MAX_SUGGESTIONS = 5;
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +28,28 @@ function Navbar() {
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     triggerSearch();
+    setIsSearchOpen(false);
+  };
+
+  // Live "as you type" suggestions for the navbar search field. The Menu
+  // section already filters live off the same shared query, but it's
+  // below the fold, so typing here felt like nothing was happening —
+  // this small dropdown gives instant, visible feedback while typing,
+  // before the person even submits/scrolls down to Menu.
+  const suggestions = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    if (!normalizedQuery) return [];
+    return menuItems
+      .filter((item) =>
+        `${item.name} ${item.description ?? ''}`.toLowerCase().includes(normalizedQuery),
+      )
+      .slice(0, MAX_SUGGESTIONS);
+  }, [query]);
+
+  const showSuggestions = isSearchOpen && query.trim().length > 0;
+
+  const handleSuggestionClick = (name) => {
+    triggerSearch(name);
     setIsSearchOpen(false);
   };
 
@@ -145,12 +170,48 @@ function Navbar() {
                 placeholder="Search the menu — e.g. paneer, cold coffee, pizza…"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
+                autoComplete="off"
+                role="combobox"
+                aria-expanded={showSuggestions}
+                aria-controls="navbar-search-suggestions"
               />
             </label>
             <button type="submit" className="btn btn--primary navbar__search-submit">
               View results
             </button>
           </form>
+
+          {showSuggestions && (
+            <div className="container navbar__search-suggestions-wrap">
+              <ul
+                id="navbar-search-suggestions"
+                className="navbar__search-suggestions"
+                role="listbox"
+              >
+                {suggestions.length > 0 ? (
+                  suggestions.map((item) => (
+                    <li key={item.id}>
+                      <button
+                        type="button"
+                        className="navbar__search-suggestion"
+                        role="option"
+                        onClick={() => handleSuggestionClick(item.name)}
+                      >
+                        <span className="navbar__search-suggestion-name">{item.name}</span>
+                        <span className="navbar__search-suggestion-category">
+                          {item.category}
+                        </span>
+                      </button>
+                    </li>
+                  ))
+                ) : (
+                  <li className="navbar__search-suggestion navbar__search-suggestion--empty">
+                    No dishes match “{query}” — press Enter to search anyway.
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
 

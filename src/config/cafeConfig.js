@@ -34,7 +34,7 @@ export const cafeConfig = {
 
   hero: {
     eyebrow: 'Est. in a tin-roofed corner shop',
-    headlineLines: ['Good Food.', 'Good Coffee.', 'Good Times.'],
+    headlineLines: ['Good Food.', 'Good Times.'],
     subheadline:
       'Freshly brewed coffee, indulgent desserts and café favourites \u2014 made for moments worth savouring.',
     locationTag: 'Vadavalli, Coimbatore',
@@ -47,8 +47,15 @@ export const cafeConfig = {
 
   contact: {
     address: 'RR Complex, Amman Kovil Street, Vadavalli, Coimbatore - 641041',
-    hours: 'Tue \u2013 Sun, 7:30am \u2013 6:00pm',
-    phone: '+91 97516 25990',
+    hours: [
+      { day: 'Tue', time: '7:30am \u2013 6:00pm' },
+      { day: 'Wed', time: '7:30am \u2013 6:00pm' },
+      { day: 'Thu', time: '7:30am \u2013 6:00pm' },
+      { day: 'Fri', time: '7:30am \u2013 6:00pm' },
+      { day: 'Sat', time: '7:30am \u2013 6:00pm' },
+      { day: 'Sun', time: '7:30am \u2013 6:00pm' },
+    ],
+    phone: '+91 96299 36178',
     // Google Maps "search" deep link built from the address above — works
     // without an API key and opens directions/search in Maps on both
     // mobile and desktop.
@@ -66,11 +73,11 @@ export const cafeConfig = {
     // links). Dial numbers are digits-only with country code, as required
     // by tel:/wa.me links.
     whatsapp: {
-      display: '97516 25990',
-      dial: '919751625990',
+      display: '96299 36178',
+      dial: '919629936178',
     },
     phoneNumbers: [
-      { display: '97516 25990', dial: '919751625990' },
+      { display: '96299 36178', dial: '919629936178' },
       { display: '99446 85650', dial: '919944685650' },
     ],
   },

@@ -71,7 +71,7 @@
 }
 
 .menu-row__veg-dot--nonveg {
-  background-color: var(--color-accent-strong);
+  background-color: var(--color-accent-strong-bg);
 }
 
 .menu-row__name {
@@ -135,7 +135,7 @@
 .menu-row__size-pill--active {
   background-color: var(--color-accent);
   border-color: var(--color-accent);
-  color: var(--color-espresso);
+  color: var(--color-on-accent);
 }
 
 /* --- Action: Add button / stepper --- */
@@ -157,8 +157,8 @@
 }
 
 .menu-row__add:hover {
-  background-color: var(--color-accent-strong);
-  color: var(--color-cream);
+  background-color: var(--color-accent-strong-bg);
+  color: var(--color-espresso);
 }
 
 .menu-row__stepper {

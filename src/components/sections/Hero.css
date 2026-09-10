@@ -1,20 +1,21 @@
 .hero {
   position: relative;
+  overflow: hidden;
   background-color: var(--color-bg-dark);
   color: var(--color-text-on-dark);
-  overflow: hidden;
-  padding-block: var(--space-9) var(--space-9);
+  padding-block: var(--space-6) var(--space-6);
+  min-height: 82vh; /* shorter now that the subheadline is gone */
+  display: flex;
+  align-items: center;
 }
 
-/* Vintage tin-sign backdrop: soft vignette + faint paper grain, standing
-   in for embossed metal without using an image asset. */
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 18% 15%, rgba(184, 134, 59, 0.18), transparent 55%),
-    radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.4), transparent 60%);
+    radial-gradient(circle at 15% 10%, rgba(224, 112, 143, 0.14), transparent 50%),
+    radial-gradient(circle at 90% 0%, rgba(78, 148, 136, 0.14), transparent 50%);
   pointer-events: none;
 }
 
@@ -22,30 +23,28 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--space-7);
+  align-items: center;
+  gap: var(--space-5);
+  width: 100%;
 }
 
-/* --- Copy column --- */
+/* --- Copy --- */
 .hero__copy {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: var(--space-4);
-}
-
-.hero__logo {
-  animation: heroBadgeReveal var(--duration-slow) var(--ease-out-soft) both;
+  gap: var(--space-3);
+  max-width: 640px;
+  margin-inline: auto;
 }
 
 .hero__eyebrow {
   font-size: var(--text-xs);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--color-brass-light);
-  animation: heroFadeUp var(--duration-slow) var(--ease-out-soft) both;
-  animation-delay: 80ms;
 }
 
 .hero__headline {
@@ -56,17 +55,15 @@
 
 .hero__headline-line {
   display: block;
-  animation: heroFadeUp var(--duration-slow) var(--ease-out-soft) both;
-  animation-delay: calc(140ms + var(--i) * 90ms);
 }
 
+/* kept in case the subheadline is reintroduced elsewhere; unused now that
+   the <p className="hero__subheadline"> line is removed from Hero.jsx */
 .hero__subheadline {
   font-size: var(--text-md);
   line-height: var(--leading-loose);
   color: var(--color-text-on-dark-muted);
   max-width: 46ch;
-  animation: heroFadeUp var(--duration-slow) var(--ease-out-soft) both;
-  animation-delay: 420ms;
 }
 
 .hero__actions {
@@ -74,9 +71,7 @@
   flex-direction: column;
   width: 100%;
   gap: var(--space-3);
-  margin-top: var(--space-2);
-  animation: heroFadeUp var(--duration-slow) var(--ease-out-soft) both;
-  animation-delay: 500ms;
+  margin-top: var(--space-1);
 }
 
 .hero__actions .btn {
@@ -91,8 +86,6 @@
   font-weight: 600;
   letter-spacing: var(--tracking-wide);
   color: var(--color-text-on-dark-muted);
-  animation: heroFadeUp var(--duration-slow) var(--ease-out-soft) both;
-  animation-delay: 580ms;
 }
 
 .hero__location-icon {
@@ -102,100 +95,106 @@
   flex-shrink: 0;
 }
 
-/* --- Visual panel (desktop-only decorative composition) --- */
-.hero__visual {
-  display: none;
-}
-
-.hero__visual-frame {
-  position: relative;
+/* --- Sliding 5-up placeholder gallery with dot pagination --- */
+.hero__gallery {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: var(--space-4);
-  aspect-ratio: 1 / 1;
-  border-radius: var(--radius-xl);
-  background:
-    var(--texture-grain),
-    linear-gradient(155deg, var(--color-espresso-2), var(--color-espresso));
-  background-size: 14px 14px, cover;
-  border: 1px solid var(--color-border-on-dark);
-  box-shadow: var(--shadow-xl);
 }
 
-.hero__visual-ring {
-  position: absolute;
-  border-radius: var(--radius-full);
-  border: 1px solid rgba(212, 168, 87, 0.3);
-}
-
-.hero__visual-ring--outer {
-  inset: 12%;
-}
-
-.hero__visual-ring--inner {
-  inset: 22%;
-  border-style: dashed;
-}
-
-.hero__visual-emblem {
-  position: relative;
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 2.4rem + 2vw, 5rem);
-  font-weight: 600;
-  color: var(--color-brass-light);
-}
-
-.hero__visual-caption {
-  position: relative;
-  font-size: var(--text-xs);
+.hero__gallery-caption {
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: var(--color-text-on-dark-muted);
+  color: var(--color-oxblood-light);
 }
 
-@keyframes heroFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.hero__gallery-viewport {
+  /* uniform slot width (base circle + gap) keeps the slide math accurate.
+     Visual "bigger" circles come from transform: scale() (doesn't affect
+     layout width), so the gap is sized generously enough that scaled
+     circles never overlap their neighbors. */
+  --plate-base: 80px;
+  --plate-step: 124px; /* 80px slot + 44px gap, wide enough for scale(1.7) center circle */
+  width: calc(var(--plate-step) * 5);
+  max-width: 100%;
+  overflow: hidden; /* single value on both axes — avoids the stray scrollbar */
+  padding-block: 30px; /* headroom so the scaled-up center circle isn't clipped */
 }
 
-@keyframes heroBadgeReveal {
-  from {
-    opacity: 0;
-    transform: scale(0.85);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.hero__gallery-track {
+  display: flex;
+  align-items: center;
+  gap: 44px; /* matches --plate-step minus --plate-base */
+  transform: translateX(calc(-1 * var(--plate-step)));
+}
+
+.hero__gallery-track--shift {
+  transition: transform 650ms var(--ease-standard);
+  transform: translateX(calc(-2 * var(--plate-step)));
+}
+
+.hero__plate {
+  flex-shrink: 0;
+  width: var(--plate-base);
+  height: var(--plate-base);
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-border-on-dark);
+  background-color: rgba(248, 240, 226, 0.03);
+  transform: scale(1);
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.hero__plate:nth-child(3),
+.hero__plate:nth-child(5) {
+  border-color: var(--color-forest-light);
+  transform: scale(1.3); /* ~104px visual */
+}
+
+.hero__plate:nth-child(4) {
+  border-color: var(--color-oxblood-light);
+  transform: scale(1.7); /* ~136px visual, largest, dead center */
+}
+
+/* --- Dot pagination --- */
+.hero__gallery-dots {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.hero__gallery-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-border-on-dark);
+  transition: background-color var(--duration-base) var(--ease-standard),
+    width var(--duration-base) var(--ease-standard);
+}
+
+.hero__gallery-dot--active {
+  width: 20px;
+  background-color: var(--color-oxblood-light);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__logo,
-  .hero__eyebrow,
-  .hero__headline-line,
-  .hero__subheadline,
-  .hero__actions,
-  .hero__location {
-    animation: none;
+  .hero__gallery-track,
+  .hero__gallery-track--shift,
+  .hero__plate {
+    transition: none;
+  }
+
+  .hero__gallery-dot {
+    transition: none;
   }
 }
 
 /* --- Breakpoint: tablet and up --- */
 @media (min-width: 768px) {
   .hero {
-    padding-block: var(--space-11) var(--space-10);
-  }
-
-  .hero__copy {
-    max-width: 640px;
+    padding-block: var(--space-8) var(--space-7);
   }
 
   .hero__actions {
@@ -207,37 +206,14 @@
   .hero__actions .btn {
     width: auto;
   }
-}
 
-/* --- Breakpoint: small laptop and up — split composition --- */
-@media (min-width: 1024px) {
-  .hero {
-    padding-block: var(--space-12) var(--space-11);
+  .hero__gallery-viewport {
+    --plate-base: 100px;
+    --plate-step: 156px; /* 100px slot + 56px gap, wide enough for scale(1.7) center circle */
+    padding-block: 40px;
   }
 
-  .hero__inner {
-    flex-direction: row;
-    align-items: center;
-    gap: var(--space-9);
-  }
-
-  .hero__copy {
-    flex: 1 1 50%;
-    align-items: flex-start;
-    text-align: left;
-    max-width: none;
-  }
-
-  .hero__actions {
-    justify-content: flex-start;
-  }
-
-  .hero__visual {
-    display: flex;
-    flex: 1 1 42%;
-  }
-
-  .hero__visual-frame {
-    width: 100%;
+  .hero__gallery-track {
+    gap: 56px;
   }
 }

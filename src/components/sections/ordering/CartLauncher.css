@@ -10,7 +10,7 @@
   padding: var(--space-4) var(--space-5);
   padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
   background-color: var(--color-accent);
-  color: var(--color-espresso);
+  color: var(--color-on-accent);
   box-shadow: var(--shadow-lg);
   font-family: var(--font-body);
   font-weight: 600;
@@ -50,8 +50,8 @@
   height: 18px;
   padding-inline: 3px;
   border-radius: var(--radius-full);
-  background-color: var(--color-accent-strong);
-  color: var(--color-cream);
+  background-color: var(--color-accent-strong-bg);
+  color: var(--color-espresso);
   font-size: 10px;
   font-weight: 700;
   border: 1.5px solid var(--color-accent);

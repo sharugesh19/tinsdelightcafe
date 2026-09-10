@@ -30,10 +30,12 @@ const galleryImages = Object.entries(galleryModules)
   })
   .sort((a, b) => a.src.localeCompare(b.src));
 
-const PLACEHOLDER_COUNT = 6;
+const PLACEHOLDER_COUNT = 8;
+const FULL_GALLERY_PLACEHOLDER_COUNT = 20;
 
 function Gallery() {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [isFullGalleryOpen, setIsFullGalleryOpen] = useState(false);
   const hasImages = galleryImages.length > 0;
 
   const closeLightbox = () => setActiveIndex(null);
@@ -52,6 +54,15 @@ function Gallery() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeIndex]);
+
+  useEffect(() => {
+    if (!isFullGalleryOpen) return undefined;
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setIsFullGalleryOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isFullGalleryOpen]);
 
   return (
     <section id="gallery" className="section gallery">
@@ -81,17 +92,68 @@ function Gallery() {
           </div>
         ) : (
           <div className="gallery__empty">
-            <div className="gallery__grid gallery__grid--placeholder" aria-hidden="true">
-              {Array.from({ length: PLACEHOLDER_COUNT }).map((_, index) => (
-                <div key={index} className="gallery__tile gallery__tile--placeholder">
+            <div className="gallery__grid gallery__grid--placeholder">
+              {Array.from({ length: PLACEHOLDER_COUNT - 1 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="gallery__tile gallery__tile--placeholder"
+                  aria-hidden="true"
+                >
                   <IconImage className="gallery__placeholder-icon" />
                 </div>
               ))}
+              <button
+                type="button"
+                className="gallery__tile gallery__tile--placeholder gallery__tile--more"
+                onClick={() => setIsFullGalleryOpen(true)}
+                aria-haspopup="dialog"
+              >
+                <span className="gallery__tile-more-plus">+</span>
+                <span className="gallery__tile-more-label">View full gallery</span>
+              </button>
             </div>
             <p className="gallery__empty-note">
               Photos coming soon — add images to <code>src/assets/gallery</code> and they&rsquo;ll
               show up here automatically.
             </p>
+          </div>
+        )}
+
+        {isFullGalleryOpen && (
+          <div
+            className="gallery__full-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Full gallery"
+            onClick={() => setIsFullGalleryOpen(false)}
+          >
+            <div className="gallery__full-panel" onClick={(event) => event.stopPropagation()}>
+              <div className="gallery__full-panel-header">
+                <h3 className="gallery__full-panel-title">Full Gallery</h3>
+                <button
+                  type="button"
+                  className="gallery__full-panel-close"
+                  onClick={() => setIsFullGalleryOpen(false)}
+                  aria-label="Close full gallery"
+                >
+                  <IconClose />
+                </button>
+              </div>
+              <div className="gallery__grid gallery__grid--placeholder gallery__grid--full">
+                {Array.from({ length: FULL_GALLERY_PLACEHOLDER_COUNT }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="gallery__tile gallery__tile--placeholder"
+                    aria-hidden="true"
+                  >
+                    <IconImage className="gallery__placeholder-icon" />
+                  </div>
+                ))}
+              </div>
+              <p className="gallery__empty-note">
+                This is a placeholder gallery page — real photos will replace these tiles.
+              </p>
+            </div>
           </div>
         )}
       </div>
