@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Hero from './components/sections/Hero';
@@ -10,6 +11,7 @@ import { CartProvider } from './components/sections/ordering/CartContext';
 import { SearchProvider } from './components/common/SearchContext';
 import CartDrawer from './components/sections/ordering/CartDrawer';
 import CartLauncher from './components/sections/ordering/CartLauncher';
+import LoadingScreen from './components/common/LoadingScreen';
 
 /**
  * App
@@ -22,13 +24,18 @@ import CartLauncher from './components/sections/ordering/CartLauncher';
  * phone, WhatsApp) are two separate sections under components/sections/
  * visit and components/sections/contact respectively — this file just
  * assembles it all into the page. Story remains a structural placeholder
- * for a later phase (see PlaceholderSection.jsx).
+ * for a later phase (see PlaceholderSection.jsx). LoadingScreen shows a
+ * logo + circular loader on first load and fades out once the page (and
+ * its assets) are ready — see components/common/LoadingScreen.jsx.
  * -----------------------------------------------------------------------
  */
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <CartProvider>
       <SearchProvider>
+        {isLoading && <LoadingScreen onFinish={() => setIsLoading(false)} />}
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { cafeConfig } from '../../config/cafeConfig';
-import { IconPin } from '../common/Icons';
 import './Hero.css';
 
 const VISIBLE = 5;
@@ -58,6 +57,7 @@ function Hero() {
             <a href={hero.primaryCta.href} className="btn btn--primary">
               {hero.primaryCta.label}
             </a>
+
             
             <a  href={whatsappHref}
               target="_blank"
@@ -67,16 +67,9 @@ function Hero() {
               {hero.secondaryCta.label}
             </a>
           </div>
-
-          <p className="hero__location">
-            <IconPin className="hero__location-icon" />
-            {hero.locationTag}
-          </p>
         </div>
 
         <div className="hero__gallery" aria-hidden="true">
-          <p className="hero__gallery-caption">Menu photos coming soon</p>
-
           <div className="hero__gallery-viewport">
             <div
               ref={trackRef}

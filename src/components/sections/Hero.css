@@ -4,7 +4,7 @@
   background-color: var(--color-bg-dark);
   color: var(--color-text-on-dark);
   padding-block: var(--space-6) var(--space-6);
-  min-height: 82vh; /* shorter now that the subheadline is gone */
+  min-height: 82vh;
   display: flex;
   align-items: center;
 }
@@ -57,8 +57,6 @@
   display: block;
 }
 
-/* kept in case the subheadline is reintroduced elsewhere; unused now that
-   the <p className="hero__subheadline"> line is removed from Hero.jsx */
 .hero__subheadline {
   font-size: var(--text-md);
   line-height: var(--leading-loose);
@@ -68,31 +66,23 @@
 
 .hero__actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  gap: var(--space-3);
+  gap: var(--space-2);
   margin-top: var(--space-1);
 }
 
-.hero__actions .btn {
-  width: 100%;
-}
-
-.hero__location {
+.hero__actions a.btn {
+  flex: 1 1 0;
+  width: auto !important;
+  min-width: 0;
   display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: var(--tracking-wide);
-  color: var(--color-text-on-dark-muted);
-}
-
-.hero__location-icon {
-  width: 15px;
-  height: 15px;
-  color: var(--color-brass-light);
-  flex-shrink: 0;
+  justify-content: center;
+  white-space: nowrap;
+  padding-inline: var(--space-3);
 }
 
 /* --- Sliding 5-up placeholder gallery with dot pagination --- */
@@ -103,31 +93,20 @@
   gap: var(--space-4);
 }
 
-.hero__gallery-caption {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--color-oxblood-light);
-}
-
 .hero__gallery-viewport {
-  /* uniform slot width (base circle + gap) keeps the slide math accurate.
-     Visual "bigger" circles come from transform: scale() (doesn't affect
-     layout width), so the gap is sized generously enough that scaled
-     circles never overlap their neighbors. */
-  --plate-base: 80px;
-  --plate-step: 124px; /* 80px slot + 44px gap, wide enough for scale(1.7) center circle */
+  --plate-base: 105px;
+  --plate-step: 180px;
   width: calc(var(--plate-step) * 5);
   max-width: 100%;
-  overflow: hidden; /* single value on both axes — avoids the stray scrollbar */
-  padding-block: 30px; /* headroom so the scaled-up center circle isn't clipped */
+  overflow: hidden;
+  padding-block: 54px;
 }
 
 .hero__gallery-track {
   display: flex;
   align-items: center;
-  gap: 44px; /* matches --plate-step minus --plate-base */
+  gap: 75px; /* matches --plate-step minus --plate-base */
+  margin-left: calc((var(--plate-step) - var(--plate-base)) / 2);
   transform: translateX(calc(-1 * var(--plate-step)));
 }
 
@@ -150,12 +129,12 @@
 .hero__plate:nth-child(3),
 .hero__plate:nth-child(5) {
   border-color: var(--color-forest-light);
-  transform: scale(1.3); /* ~104px visual */
+  transform: scale(1.3); /* was 1.4 */
 }
 
 .hero__plate:nth-child(4) {
   border-color: var(--color-oxblood-light);
-  transform: scale(1.7); /* ~136px visual, largest, dead center */
+  transform: scale(1.6); /* was 1.9 — dialed back so the gap can contain it */
 }
 
 /* --- Dot pagination --- */
@@ -197,23 +176,14 @@
     padding-block: var(--space-8) var(--space-7);
   }
 
-  .hero__actions {
-    flex-direction: row;
-    justify-content: center;
-    width: auto;
-  }
-
-  .hero__actions .btn {
-    width: auto;
-  }
 
   .hero__gallery-viewport {
-    --plate-base: 100px;
-    --plate-step: 156px; /* 100px slot + 56px gap, wide enough for scale(1.7) center circle */
-    padding-block: 40px;
+    --plate-base: 115px;
+    --plate-step: 205px; /* 115px slot + 90px gap */
+    padding-block: 58px;
   }
 
   .hero__gallery-track {
-    gap: 56px;
+    gap: 90px;
   }
 }
