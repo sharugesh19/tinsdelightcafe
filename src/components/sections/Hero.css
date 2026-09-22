@@ -245,10 +245,6 @@
     width: 11px;
     height: 11px;
   }
-
-  .hero__stat-badge strong {
-    font-weight: 700;
-  }
 }
 .hero__veg-badge {
   display: inline-flex;
