@@ -205,8 +205,17 @@
     align-items: flex-start;
     padding-top: 40px;
   }
-}
 
+  .hero__gallery-viewport {
+    --plate-base: 130px;
+    --plate-step: 210px;
+    padding-block: 44px;
+  }
+
+  .hero__gallery-track {
+    gap: 80px;
+  }
+}
 /* ---------- Badge row: Pure Veg + Orders stat, side by side ---------- */
 .hero__badges {
   display: flex;
