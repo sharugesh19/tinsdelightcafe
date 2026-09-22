@@ -77,7 +77,9 @@
 .menu-row__name {
   font-size: var(--text-md);
   min-width: 0;
-  overflow-wrap: break-word;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
 }
 
 /* Dotted leader rule between name and price — the classic printed-menu
@@ -202,5 +204,22 @@
   .menu-row__thumb {
     width: 68px;
     height: 68px;
+  }
+}
+@media (max-width: 480px) {
+  .menu-row__heading {
+    flex-wrap: wrap;
+  }
+
+  .menu-row__name {
+    flex-basis: 100%;
+  }
+
+  .menu-row__rule {
+    display: none;
+  }
+
+  .menu-row__price {
+    margin-top: 2px;
   }
 }
