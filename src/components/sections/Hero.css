@@ -29,7 +29,6 @@
   width: 100%;
 }
 
-/* --- Copy --- */
 .hero__copy {
   display: flex;
   flex-direction: column;
@@ -86,7 +85,6 @@
   padding-inline: var(--space-3);
 }
 
-/* --- Sliding 5-up placeholder gallery with dot pagination --- */
 .hero__gallery {
   display: flex;
   flex-direction: column;
@@ -106,7 +104,7 @@
 .hero__gallery-track {
   display: flex;
   align-items: center;
-  gap: 70px; /* matches --plate-step minus --plate-base */
+  gap: 70px;
   margin-left: calc((var(--plate-step) - var(--plate-base)) / 2);
   transform: translateX(calc(-1 * var(--plate-step)));
 }
@@ -141,15 +139,14 @@
 .hero__plate:nth-child(3),
 .hero__plate:nth-child(5) {
   border-color: var(--color-forest-light);
-  transform: scale(1.3); /* was 1.4 */
+  transform: scale(1.3);
 }
 
 .hero__plate:nth-child(4) {
   border-color: var(--color-oxblood-light);
-  transform: scale(1.6); /* was 1.9 — dialed back so the gap can contain it */
+  transform: scale(1.6);
 }
 
-/* --- Dot pagination --- */
 .hero__gallery-dots {
   display: flex;
   align-items: center;
@@ -182,12 +179,10 @@
   }
 }
 
-/* --- Breakpoint: tablet and up --- */
 @media (min-width: 768px) {
   .hero {
     padding-block: var(--space-6) var(--space-5);
   }
-
 
   .hero__gallery-viewport {
     --plate-base: 100px;
@@ -217,6 +212,7 @@
     gap: 80px;
   }
 }
+
 /* ---------- Badge row: Pure Veg + Orders stat, side by side ---------- */
 .hero__badges {
   display: flex;
@@ -226,26 +222,7 @@
   gap: 10px;
   margin-bottom: 4px;
 }
-@media (max-width: 480px) {
-  .hero__badges {
-    flex-wrap: nowrap;
-    gap: 4px;
-    width: 100%;
-    justify-content: center;
-  }
 
-  .hero__veg-badge,
-  .hero__stat-badge {
-    padding: 4px 8px;
-    font-size: 0.65rem;
-    white-space: nowrap;
-  }
-
-  .hero__veg-icon {
-    width: 11px;
-    height: 11px;
-  }
-}
 .hero__veg-badge {
   display: inline-flex;
   align-items: center;
@@ -279,7 +256,6 @@
   background: #1f7a34;
 }
 
-/* ---------- Stat badge (5000+ orders delivered) — matches veg badge shape ---------- */
 .hero__stat-badge {
   display: inline-flex;
   align-items: center;
@@ -297,4 +273,26 @@
 .hero__stat-badge strong {
   color: var(--color-brass-light);
   font-weight: 700;
+}
+
+/* ---------- Mobile: shrink badges so both fit on one line ---------- */
+@media (max-width: 480px) {
+  .hero__badges {
+    flex-wrap: nowrap;
+    gap: 4px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero__veg-badge,
+  .hero__stat-badge {
+    padding: 4px 8px;
+    font-size: 0.65rem;
+    white-space: nowrap;
+  }
+
+  .hero__veg-icon {
+    width: 11px;
+    height: 11px;
+  }
 }
