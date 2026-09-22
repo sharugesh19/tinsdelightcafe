@@ -3,8 +3,8 @@
   overflow: hidden;
   background-color: var(--color-bg-dark);
   color: var(--color-text-on-dark);
-  padding-block: var(--space-6) var(--space-6);
-  min-height: 82vh;
+  padding-block: var(--space-5) var(--space-5);
+  min-height: auto;
   display: flex;
   align-items: center;
 }
@@ -24,7 +24,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-5);
+  gap: var(--space-4);
   width: 100%;
 }
 
@@ -90,22 +90,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
 .hero__gallery-viewport {
-  --plate-base: 105px;
-  --plate-step: 180px;
+  --plate-base: 90px;
+  --plate-step: 160px;
   width: calc(var(--plate-step) * 5);
   max-width: 100%;
   overflow: hidden;
-  padding-block: 54px;
+  padding-block: 30px;
 }
 
 .hero__gallery-track {
   display: flex;
   align-items: center;
-  gap: 75px; /* matches --plate-step minus --plate-base */
+  gap: 70px; /* matches --plate-step minus --plate-base */
   margin-left: calc((var(--plate-step) - var(--plate-base)) / 2);
   transform: translateX(calc(-1 * var(--plate-step)));
 }
@@ -184,17 +184,88 @@
 /* --- Breakpoint: tablet and up --- */
 @media (min-width: 768px) {
   .hero {
-    padding-block: var(--space-8) var(--space-7);
+    padding-block: var(--space-6) var(--space-5);
   }
 
 
   .hero__gallery-viewport {
-    --plate-base: 115px;
-    --plate-step: 205px; /* 115px slot + 90px gap */
-    padding-block: 58px;
+    --plate-base: 100px;
+    --plate-step: 180px;
+    padding-block: 34px;
   }
 
   .hero__gallery-track {
-    gap: 90px;
+    gap: 80px;
   }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    min-height: 100vh;
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+}
+
+/* ---------- Badge row: Pure Veg + Orders stat, side by side ---------- */
+.hero__badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.hero__veg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #eafaf0;
+  color: #1f7a34;
+  border: 1.5px solid #1f7a34;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.hero__veg-icon {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #1f7a34;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.hero__veg-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1f7a34;
+}
+
+/* ---------- Stat badge (5000+ orders delivered) — matches veg badge shape ---------- */
+.hero__stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid var(--color-border-on-dark);
+  color: var(--color-text-on-dark);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.hero__stat-badge strong {
+  color: var(--color-brass-light);
+  font-weight: 700;
 }

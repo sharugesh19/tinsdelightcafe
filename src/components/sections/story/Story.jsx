@@ -24,12 +24,17 @@ function Story() {
 
         <div className="story__grid">
           <div className="story__content card">
-            <h3 className="story__headline">Crafted with passion, served with warmth</h3>
+                        <h3 className="story__headline">From a baking academy to a neighbourhood café</h3>
             <p className="story__paragraph">
-              Tin&rsquo;s Delight Café started with a simple belief: great coffee and comforting food can turn any ordinary morning into a memorable moment. What began in a modest corner shop in Vadavalli has grown into a beloved destination for coffee purists and food lovers alike.
+              Before Tin&rsquo;s Delight Café opened its doors, it began life as Tin&rsquo;s
+              Delight Baking Academy &mdash; teaching the craft of baking to students who shared
+              a love for good food made the right way. That hands-on experience, recipe after
+              recipe, became the foundation for something bigger.
             </p>
             <p className="story__paragraph">
-              Every cup of our South Indian filter coffee is hand-poured using traditional methods, while our pizzas, burgers, and artisanal desserts are prepared fresh daily using local ingredients.
+              What started as a place to teach baking soon grew into a full café in Vadavalli,
+              where that same care now goes into every cup of hand-poured South Indian filter
+              coffee, every pizza, and every dessert baked fresh in-house daily.
             </p>
 
             <div className="story__highlights">
@@ -38,8 +43,8 @@ function Story() {
                 <span className="story__highlight-label">Fresh & Local Ingredients</span>
               </div>
               <div className="story__highlight-item">
-                <span className="story__highlight-num">10+</span>
-                <span className="story__highlight-label">Years of Crafting Coffee</span>
+                <span className="story__highlight-num">5000+</span>
+                <span className="story__highlight-label">Orders Successfully Delievered</span>
               </div>
             </div>
           </div>

@@ -20,10 +20,11 @@ export const cafeConfig = {
     emblemInitial: 'T',
   },
 
-  nav: {
+    nav: {
     links: [
       { label: 'Home', href: '#home' },
       { label: 'Menu', href: '#menu' },
+      { label: 'Customized Cakes', href: '#cakes' },
       { label: 'Gallery', href: '#gallery' },
       { label: 'Our Story', href: '#story' },
       { label: 'Visit', href: '#visit' },

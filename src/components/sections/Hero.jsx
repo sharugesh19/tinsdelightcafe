@@ -47,6 +47,19 @@ function Hero() {
     <section id="home" className="hero">
       <div className="container hero__inner">
         <div className="hero__copy">
+          <div className="hero__badges">
+            <span className="hero__veg-badge">
+              <span className="hero__veg-icon" aria-hidden="true">
+                <span className="hero__veg-dot" />
+              </span>
+              100% Pure Veg
+            </span>
+
+            <span className="hero__stat-badge">
+              <strong>5000+</strong> Orders Delivered
+            </span>
+          </div>
+
           <p className="hero__eyebrow">{hero.eyebrow}</p>
 
           <h1 className="hero__headline">

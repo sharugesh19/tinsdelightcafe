@@ -13,6 +13,14 @@
   pointer-events: none;
 }
 
+.story .section-heading__title {
+  color: var(--color-text-on-dark);
+}
+
+.story .section-heading__subtitle {
+  color: var(--color-text-on-dark-muted);
+}
+
 .story__grid {
   display: grid;
   grid-template-columns: 1fr;

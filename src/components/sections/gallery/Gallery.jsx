@@ -1,48 +1,67 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { IconImage, IconClose, IconArrowRight } from '../../common/Icons';
 import './Gallery.css';
 
 /**
  * Gallery
  * -----------------------------------------------------------------------
- * Photo grid for the café. Uses Vite's import.meta.glob to pick up every
- * image already sitting in src/assets/gallery — so adding real photos
- * later is just "drop files into that folder", no code change required.
- * Because glob only matches files that actually exist, this never
- * breaks the build even when the folder is empty (see the README in
- * that folder for naming tips); it just falls back to a friendly
- * "photos coming soon" placeholder grid instead.
+ * Photo grid for the café, grouped into categories. Uses Vite's
+ * import.meta.glob to pick up every image sitting in a subfolder of
+ * src/assets/gallery — so adding real photos later is just "drop a file
+ * into the right category subfolder", no code change required. The
+ * subfolder name becomes the category label (e.g. `cafe-interior/` →
+ * "Cafe Interior"). Because glob only matches files that actually
+ * exist, this never breaks the build even when the folder is empty; it
+ * just falls back to a short "photos coming soon" note instead of a
+ * grid of empty placeholder tiles.
  * -----------------------------------------------------------------------
  */
+const ALL = 'All';
+
 const galleryModules = import.meta.glob(
-  '../../../assets/gallery/*.{png,jpg,jpeg,webp,avif}',
+  '../../../assets/gallery/*/*.{png,jpg,jpeg,webp,avif}',
   { eager: true, import: 'default' },
 );
 
+function toLabel(slug) {
+  return slug
+    .replace(/[-_]+/g, ' ')
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
 const galleryImages = Object.entries(galleryModules)
   .map(([path, src]) => {
-    const filename = path.split('/').pop() ?? '';
+    const parts = path.split('/');
+    const filename = parts.pop() ?? '';
+    const categorySlug = parts.pop() ?? '';
     const nameWithoutExt = filename.replace(/\.[^./]+$/, '');
-    const alt = nameWithoutExt
-      .replace(/[-_]+/g, ' ')
-      .replace(/\b\w/g, (char) => char.toUpperCase());
-    return { src, alt: alt || "Tin's Delight Café" };
+    const alt = toLabel(nameWithoutExt) || "Tin's Delight Café";
+    const category = toLabel(categorySlug) || 'Gallery';
+    return { src, alt, category };
   })
   .sort((a, b) => a.src.localeCompare(b.src));
 
-const PLACEHOLDER_COUNT = 8;
-const FULL_GALLERY_PLACEHOLDER_COUNT = 20;
+const categories = Array.from(new Set(galleryImages.map((image) => image.category))).sort();
 
 function Gallery() {
   const [activeIndex, setActiveIndex] = useState(null);
-  const [isFullGalleryOpen, setIsFullGalleryOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(ALL);
   const hasImages = galleryImages.length > 0;
+
+  const tabs = useMemo(() => [ALL, ...categories], []);
+
+  const filteredImages = useMemo(() => {
+    if (activeCategory === ALL) return galleryImages;
+    return galleryImages.filter((image) => image.category === activeCategory);
+  }, [activeCategory]);
 
   const closeLightbox = () => setActiveIndex(null);
   const showPrev = () =>
-    setActiveIndex((prev) => (prev === null ? null : (prev - 1 + galleryImages.length) % galleryImages.length));
+    setActiveIndex((prev) =>
+      prev === null ? null : (prev - 1 + filteredImages.length) % filteredImages.length,
+    );
   const showNext = () =>
-    setActiveIndex((prev) => (prev === null ? null : (prev + 1) % galleryImages.length));
+    setActiveIndex((prev) => (prev === null ? null : (prev + 1) % filteredImages.length));
 
   useEffect(() => {
     if (activeIndex === null) return undefined;
@@ -53,16 +72,7 @@ function Gallery() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeIndex]);
-
-  useEffect(() => {
-    if (!isFullGalleryOpen) return undefined;
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') setIsFullGalleryOpen(false);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isFullGalleryOpen]);
+  }, [activeIndex, filteredImages.length]);
 
   return (
     <section id="gallery" className="section gallery">
@@ -76,9 +86,30 @@ function Gallery() {
           </p>
         </div>
 
-        {hasImages ? (
+        {hasImages && categories.length > 1 && (
+          <div className="gallery__categories" role="group" aria-label="Filter gallery by category">
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                aria-pressed={tab === activeCategory}
+                className={`gallery__category-pill ${
+                  tab === activeCategory ? 'gallery__category-pill--active' : ''
+                }`}
+                onClick={() => {
+                  setActiveCategory(tab);
+                  setActiveIndex(null);
+                }}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        )}
+
+                {hasImages ? (
           <div className="gallery__grid">
-            {galleryImages.map((image, index) => (
+            {filteredImages.map((image, index) => (
               <button
                 key={image.src}
                 type="button"
@@ -91,69 +122,16 @@ function Gallery() {
             ))}
           </div>
         ) : (
-          <div className="gallery__empty">
-            <div className="gallery__grid gallery__grid--placeholder">
-              {Array.from({ length: PLACEHOLDER_COUNT - 1 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="gallery__tile gallery__tile--placeholder"
-                  aria-hidden="true"
-                >
-                  <IconImage className="gallery__placeholder-icon" />
-                </div>
-              ))}
-              <button
-                type="button"
-                className="gallery__tile gallery__tile--placeholder gallery__tile--more"
-                onClick={() => setIsFullGalleryOpen(true)}
-                aria-haspopup="dialog"
+          <div className="gallery__grid gallery__grid--placeholder">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div
+                key={index}
+                className="gallery__tile gallery__tile--placeholder"
+                aria-hidden="true"
               >
-                <span className="gallery__tile-more-plus">+</span>
-                <span className="gallery__tile-more-label">View full gallery</span>
-              </button>
-            </div>
-            <p className="gallery__empty-note">
-              Photos coming soon — add images to <code>src/assets/gallery</code> and they&rsquo;ll
-              show up here automatically.
-            </p>
-          </div>
-        )}
-
-        {isFullGalleryOpen && (
-          <div
-            className="gallery__full-overlay"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Full gallery"
-            onClick={() => setIsFullGalleryOpen(false)}
-          >
-            <div className="gallery__full-panel" onClick={(event) => event.stopPropagation()}>
-              <div className="gallery__full-panel-header">
-                <h3 className="gallery__full-panel-title">Full Gallery</h3>
-                <button
-                  type="button"
-                  className="gallery__full-panel-close"
-                  onClick={() => setIsFullGalleryOpen(false)}
-                  aria-label="Close full gallery"
-                >
-                  <IconClose />
-                </button>
+                <IconImage className="gallery__placeholder-icon" />
               </div>
-              <div className="gallery__grid gallery__grid--placeholder gallery__grid--full">
-                {Array.from({ length: FULL_GALLERY_PLACEHOLDER_COUNT }).map((_, index) => (
-                  <div
-                    key={index}
-                    className="gallery__tile gallery__tile--placeholder"
-                    aria-hidden="true"
-                  >
-                    <IconImage className="gallery__placeholder-icon" />
-                  </div>
-                ))}
-              </div>
-              <p className="gallery__empty-note">
-                This is a placeholder gallery page — real photos will replace these tiles.
-              </p>
-            </div>
+            ))}
           </div>
         )}
       </div>
@@ -163,7 +141,7 @@ function Gallery() {
           className="gallery__lightbox"
           role="dialog"
           aria-modal="true"
-          aria-label={galleryImages[activeIndex].alt}
+          aria-label={filteredImages[activeIndex].alt}
           onClick={closeLightbox}
         >
           <button
@@ -175,7 +153,7 @@ function Gallery() {
             <IconClose />
           </button>
 
-          {galleryImages.length > 1 && (
+          {filteredImages.length > 1 && (
             <button
               type="button"
               className="gallery__lightbox-nav gallery__lightbox-nav--prev"
@@ -190,13 +168,13 @@ function Gallery() {
           )}
 
           <img
-            src={galleryImages[activeIndex].src}
-            alt={galleryImages[activeIndex].alt}
+            src={filteredImages[activeIndex].src}
+            alt={filteredImages[activeIndex].alt}
             className="gallery__lightbox-img"
             onClick={(event) => event.stopPropagation()}
           />
 
-          {galleryImages.length > 1 && (
+          {filteredImages.length > 1 && (
             <button
               type="button"
               className="gallery__lightbox-nav gallery__lightbox-nav--next"

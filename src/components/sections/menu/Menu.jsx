@@ -7,7 +7,8 @@ import { useSearch } from '../../common/SearchContext';
 import './Menu.css';
 
 const ALL = 'All';
-
+const INITIAL_VISIBLE_CATEGORIES = 3;
+const CATEGORY_LOAD_STEP = 3;
 /**
  * Menu
  * -----------------------------------------------------------------------
@@ -27,14 +28,22 @@ const ALL = 'All';
 function Menu() {
   const { query, setQuery, searchSignal } = useSearch();
   const [activeCategory, setActiveCategory] = useState(ALL);
+  const [visibleCategoryCount, setVisibleCategoryCount] = useState(INITIAL_VISIBLE_CATEGORIES);
 
   // A search submitted from the navbar always resets the category filter
   // to "All", so a search never appears to return zero results just
   // because a different category pill was active from earlier browsing.
-  useEffect(() => {
+    useEffect(() => {
     if (searchSignal) setActiveCategory(ALL);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchSignal]);
+
+  // Reset how many categories are revealed whenever the person switches
+  // category or starts a new search, so leftover "Load More" progress
+  // never carries over to a different filter/search.
+  useEffect(() => {
+    setVisibleCategoryCount(INITIAL_VISIBLE_CATEGORIES);
+  }, [activeCategory, query]);
 
   const tabs = useMemo(() => [ALL, ...categories], []);
 
@@ -51,7 +60,7 @@ function Menu() {
     });
   }, [query, activeCategory]);
 
-  const groupedItems = useMemo(() => {
+    const groupedItems = useMemo(() => {
     const groups = [];
     const byCategory = new Map();
     for (const item of filteredItems) {
@@ -67,6 +76,15 @@ function Menu() {
       (a, b) => categories.indexOf(a.category) - categories.indexOf(b.category),
     );
   }, [filteredItems]);
+
+  // Only paginate the unfiltered "All, no search" view — once someone
+  // has narrowed to a single category or is searching, the list is
+  // already short, so showing everything at once is fine there.
+  const isPaginatedView = activeCategory === ALL && !query.trim();
+  const displayedGroups = isPaginatedView
+    ? groupedItems.slice(0, visibleCategoryCount)
+    : groupedItems;
+  const hasMoreCategories = isPaginatedView && groupedItems.length > visibleCategoryCount;
 
   return (
     <section id="menu" className="section menu">
@@ -114,9 +132,9 @@ function Menu() {
 
         {activeCategory === ALL && !query.trim() && <FeaturedItems items={featuredItems} />}
 
-        {groupedItems.length > 0 ? (
+                {groupedItems.length > 0 ? (
           <div className="menu__groups">
-            {groupedItems.map((group) => (
+            {displayedGroups.map((group) => (
               <div key={group.category} className="menu__group">
                 <div className="menu__group-heading">
                   <h3 className="menu__group-title">{group.category}</h3>
@@ -129,6 +147,18 @@ function Menu() {
                 </div>
               </div>
             ))}
+
+            {hasMoreCategories && (
+              <div className="menu__load-more-wrap">
+                <button
+                  type="button"
+                  className="btn btn--primary menu__load-more"
+                  onClick={() => setVisibleCategoryCount((count) => count + CATEGORY_LOAD_STEP)}
+                >
+                  Load More
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <p className="menu__empty">

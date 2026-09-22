@@ -74,6 +74,7 @@
   width: 100%;
   padding-bottom: var(--space-1);
   scrollbar-width: none;
+  scroll-behavior: smooth;
 }
 
 .menu__categories::-webkit-scrollbar {
@@ -162,8 +163,13 @@
     max-width: 280px;
   }
 
-  .menu__categories {
+     .menu__categories {
     width: auto;
-    justify-content: flex-end;
+    max-width: 60%;
   }
+}
+.menu__load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-6);
 }
