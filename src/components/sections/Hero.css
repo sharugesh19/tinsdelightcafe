@@ -1,6 +1,7 @@
 .hero {
   position: relative;
   overflow: hidden;
+  overflow-x: hidden;
   background-color: var(--color-bg-dark);
   color: var(--color-text-on-dark);
   padding-block: var(--space-5) var(--space-5);
@@ -228,20 +229,25 @@
 @media (max-width: 480px) {
   .hero__badges {
     flex-wrap: nowrap;
-    gap: 6px;
+    gap: 4px;
     width: 100%;
+    justify-content: center;
   }
 
   .hero__veg-badge,
   .hero__stat-badge {
-    padding: 5px 10px;
-    font-size: 0.72rem;
+    padding: 4px 8px;
+    font-size: 0.65rem;
     white-space: nowrap;
   }
 
   .hero__veg-icon {
-    width: 13px;
-    height: 13px;
+    width: 11px;
+    height: 11px;
+  }
+
+  .hero__stat-badge strong {
+    font-weight: 700;
   }
 }
 .hero__veg-badge {
