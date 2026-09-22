@@ -225,7 +225,25 @@
   gap: 10px;
   margin-bottom: 4px;
 }
+@media (max-width: 480px) {
+  .hero__badges {
+    flex-wrap: nowrap;
+    gap: 6px;
+    width: 100%;
+  }
 
+  .hero__veg-badge,
+  .hero__stat-badge {
+    padding: 5px 10px;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .hero__veg-icon {
+    width: 13px;
+    height: 13px;
+  }
+}
 .hero__veg-badge {
   display: inline-flex;
   align-items: center;
